@@ -16,13 +16,13 @@ SneeuwMan::SneeuwMan(int positionX, int positionY) {
 
 
 void SneeuwMan::move(int direction) {
-
+	this->positionX = this->positionX+direction;
 }
 
-
-//wordt elke "tick" aangeroepen om het winterlandschap, sneeuwman en sneeuwvlokken te tekenen
 void SneeuwMan::draw() {
-
+	maSetColor( 0xebdbdbd );
+	maFillRect( this->positionX, this->positionY-30, 20, 30 );
+	maFillRect( this->positionX+4, this->positionY-42, 12, 12 );
 }
 
 
