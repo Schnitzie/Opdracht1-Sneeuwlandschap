@@ -10,6 +10,7 @@
 
 
 #include <ma.h>
+#include <mastdlib.h>
 #include <MAUtil/Vector.h>
 
 
@@ -21,7 +22,8 @@
 class SneeuwLandschap
 {
 private:
-	int sneeuwHoogte;
+	int sneeuwHoogte; //Hoogte van de sneeuw
+	int grond; //Grond eigenschap
 	SneeuwMan* sneeuwMan;
 
 	MAUtil::Vector<SneeuwVlok*> sneeuwVlokArray;

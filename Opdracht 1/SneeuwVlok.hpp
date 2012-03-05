@@ -11,6 +11,7 @@
 
 //deze header hebben we nodig voor de functie rand()
 #include <mastdlib.h>
+#include <ma.h>
 
 
 //maak een klasse SneeuwVlok

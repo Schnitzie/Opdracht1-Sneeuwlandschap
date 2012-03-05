@@ -24,6 +24,9 @@ SneeuwLandschap::SneeuwLandschap()
 	//stel sneeuwhoogte in (vanaf bodem)
 	this->sneeuwHoogte = 30;
 
+	//stel in waar de grond is
+	this->grond = screenHeight - this->sneeuwHoogte;
+
 	//maak een nieuwe sneeuwman
 	this->sneeuwMan = new SneeuwMan( screenWidth / 2, screenHeight - this->sneeuwHoogte );
 }
@@ -47,10 +50,35 @@ void SneeuwLandschap::run( MAEvent event )
 			this->sneeuwMan->move( 6 );		//beweeg sneeuwman 6 pixels
 	}
 
+	//wacht 40 ms ??
+	maWait(40);
 
-	//TODO: voeg een sneeuwvlok toe
+	//bepaal een random xpositie
+	int xpos = rand()  % (screenWidth);
 
-	//TODO: laat alle sneeuwvlokken vallen
+	//maak een sneeuwvlok aan op de random-0 coordinaten
+	SneeuwVlok* sneeuwvlok= new SneeuwVlok(xpos, 0);
+
+	//voeg het sneeuwvlokje toe aan de vector array
+	sneeuwVlokArray.add(sneeuwvlok);
+
+	//doorloop de sneeuwvlokjes vector array
+	for(int i = 0; i < sneeuwVlokArray.size(); i++) {
+		//laat het sneeuwvlokje vallen
+		sneeuwVlokArray[i]->fall(this->grond);
+
+		//als hij dood is
+		if(sneeuwVlokArray[i]->isDead()) {
+			//maak een tijdelijke pointer aan
+			SneeuwVlok* temp = sneeuwVlokArray[i];
+
+			//verder de pointer in de array
+			sneeuwVlokArray.remove(i);
+
+			//verwijder het sneeuwvlokje van het geheugen
+			delete temp;
+		}
+	}
 }
 
 
@@ -65,8 +93,13 @@ void SneeuwLandschap::draw()
 	maSetColor( 0xffffff );
 	maFillRect( 0, screenHeight - this->sneeuwHoogte, screenWidth, this->sneeuwHoogte );
 
+	//teken de sneeuwman
 	this->sneeuwMan->draw();
-	//TODO: teken alle sneeuwvlokken
+
+	//teken de sneeuwvlokjes
+	for(int i = 0; i < sneeuwVlokArray.size(); i++) {
+		sneeuwVlokArray[i]->draw();
+	}
 }
 
 
