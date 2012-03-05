@@ -1,61 +1,44 @@
-#include <MAUtil/Moblet.h>
+#include <ma.h>
 #include <conprint.h>
 
-using namespace MAUtil;
 
-/**
- * A Moblet is a high-level class that defines the
- * behaviour of a MoSync program.
- */
-class MyMoblet : public Moblet
-{
-public:
-	/**
-	 * Initialize the application in the constructor.
-	 */
-	MyMoblet()
-	{
-		printf("Press zero or back to exit\n");
-	}
+//include sneeuwlandschap om te instantiëren en gebruiken
+#include "SneeuwLandschap.hpp"
 
-	/**
-	 * Called when a key is pressed.
-	 */
-	void keyPressEvent(int keyCode, int nativeCode)
-	{
-		if (MAK_BACK == keyCode || MAK_0 == keyCode)
-		{
-			// Call close to exit the application.
-			close();
-		}
 
-		// Print the key character.
-		printf("You typed: %c\n", keyCode);
-	}
-
-	/**
-	 * Called when a key is released.
-	 */
-	void keyReleaseEvent(int keyCode, int nativeCode)
-	{
-	}
-
-	/**
-	 * Called when the screen is touched.
-	 */
-	void pointerPressEvent(MAPoint2d point)
-	{
-		// Print the x and y coordinate.
-		printf("You touched: %i %i\n", point.x, point.y);
-	}
-};
-
-/**
- * Entry point of the program. The MAMain function
- * needs to be declared as extern "C".
- */
+//de main functie
 extern "C" int MAMain()
 {
-	Moblet::run(new MyMoblet());
+	MAEvent event;
+
+	//nieuw sneeuwlandschap
+	SneeuwLandschap* sneeuwLandschap = new SneeuwLandschap();
+
+	//oneindige loop laat onze app in werking
+	while (TRUE)
+	{
+		//run met 1 frame per 100 ms
+		maWait(100);
+
+		//kijk of er events hebben plaatsgevonden, sla die info op in MAEvent event.
+		maGetEvent(&event);
+
+		//als een event de app wil sluiten...
+		if (EVENT_TYPE_CLOSE == event.type)
+		{
+			// Exit while loop.
+			break;
+		}
+
+		//handel alle logica van sneeuwlandschap af
+		sneeuwLandschap->run( event );
+
+		//teken het sneeuwlandschap
+		sneeuwLandschap->draw();
+
+		//vergeet het scherm niet te updaten!
+		maUpdateScreen();
+	}
+
 	return 0;
 }
